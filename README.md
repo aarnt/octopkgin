@@ -1,6 +1,6 @@
 ## This is OctoPkgin, a powerful pkgin front end using Qt libs.
 
-![Main window](https://raw.githubusercontent.com/aarnt/octopkg/master/octopkg-mainwindow.png)
+![Main window](https://raw.githubusercontent.com/aarnt/octopkg/master/octopkgin-mainwindow.png)
 
 **OctoPkgin** is a Qt based GUI front end to the [pkgin](https://pkgin.net/) package manager, derived from [Octopkg](http://tintaescura.com/projects/octopkg).
 It consists of a lxqt-sudo clone called [qt-sudo](https://github.com/aarnt/qt-sudo/) used to gain root privileges and a package browser application used
