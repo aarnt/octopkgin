@@ -70,7 +70,8 @@ public:
   //Delegations from Package class (due to QProcess use)
   static QString runCurlCommand(const QStringList &params);
 
-  static QByteArray performQuery(const QStringList args);
+  static QByteArray performQueryWithShell(const QStringList &args);
+  static QByteArray performQuery(const QStringList &args);
   static QByteArray performQuery(const QString &args);
   static QByteArray performQueryAsRoot(const QString &args);
   static int cancelProcess();

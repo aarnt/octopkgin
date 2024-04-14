@@ -1677,6 +1677,8 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
   QString progressRun;
   QString progressEnd;
 
+  if (msg.contains("stalled")) return;
+
   msg.remove(QRegularExpression(".+\\[Y/n\\].+"));
 
   //Let's remove color codes from strings...

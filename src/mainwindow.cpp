@@ -730,7 +730,8 @@ void MainWindow::execContextMenuPackages(QPoint point)
       }
       else if (allRemovable == true && numberOfOutdated == numberOfSelPkgs)
       {
-        ui->actionInstall->setText(StrConstants::getUpdate());
+        menu->removeAction(ui->actionInstall);
+        //ui->actionInstall->setText(StrConstants::getUpdate());
       }
       else if (allRemovable == true)
       {

@@ -66,7 +66,7 @@ QString UnixCommand::runCurlCommand(const QStringList& params){
 /*
  * Performs a pkg query
  */
-QByteArray UnixCommand::performQuery(const QStringList args)
+QByteArray UnixCommand::performQuery(const QStringList &args)
 {
   QByteArray result("");
   QProcess pkg;
@@ -78,6 +78,30 @@ QByteArray UnixCommand::performQuery(const QStringList args)
 
   pkg.start(ctn_PKG_BIN, args);
   pkg.waitForFinished();
+
+  result = pkg.readAllStandardOutput();
+  pkg.close();
+
+  return result;
+}
+
+/*
+ * Use /bin/sh to perform query
+ */
+QByteArray UnixCommand::performQueryWithShell(const QStringList &args)
+{
+  QByteArray result("");
+
+  QProcess pkg;
+  QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+  env.insert("LANG", "C");
+  env.insert("LC_MESSAGES", "C");
+  env.insert("LC_ALL", "C");
+  pkg.setProcessEnvironment(env);
+
+  pkg.start("/bin/sh", args);
+  pkg.waitForFinished();
+
   result = pkg.readAllStandardOutput();
   pkg.close();
 
@@ -212,7 +236,10 @@ QByteArray UnixCommand::getUnrequiredPackageList()
  */
 QByteArray UnixCommand::getOutdatedPackageList()
 {
-  QByteArray result = performQuery("-l\"<\" list");
+  QStringList args;
+  args << "-c";
+  args << ctn_PKG_BIN + " -l '<' list";
+  QByteArray result = performQueryWithShell(args);
   return result;
 }
 
@@ -399,15 +426,10 @@ QByteArray UnixCommand::getTargetUpgradeList(const QString &pkgName)
   QString args;
   QByteArray res = "";
 
-  if(!pkgName.isEmpty())
+  if(pkgName.isEmpty())
   {
-    args = "-n install " + pkgName;
+    args = "-n upgrade";
     res = performQueryAsRoot(args);
-  }
-  else //pkg upgrade
-  {
-    args = "upgrade -n ";
-    res = performQuery(args);
   }
 
   return res;
