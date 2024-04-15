@@ -91,7 +91,8 @@ QString OctopkginTabInfo::formatTabInfo(const PackageRepository::PackageData& pa
     if (package.status != ectn_NEWER)
     {
       const OutdatedPackageInfo opi = outdatedPkgList.value(package.name);
-      html += "<tr><td>" + version + "</td><td><b><font color=\"#E55451\">" + opi.oldVersion + "</font></b>  <b>" +
+
+      html += "<tr><td>" + version + "</td><td><b><font color=\"#E55451\">" + package.version + "</font></b>  <b>" +
           StrConstants::getNewVersionAvailable().arg(opi.newVersion) + "</b></td></tr>";
     }
     /*else

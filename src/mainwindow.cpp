@@ -28,6 +28,7 @@
 #include "searchbar.h"
 #include "utils.h"
 #include "globals.h"
+#include "packagerepository.h"
 #include <iostream>
 
 #include <QStandardItemModel>
@@ -406,12 +407,15 @@ void MainWindow::outputOutdatedPackageList()
         "</th><th width=\"18%\" align=\"right\">" +
         StrConstants::getAvailableVersion() + "</th></tr>";
 
+    PackageRepository::PackageData* pkgByName=nullptr;
     for (int c=0; c < m_outdatedStringList->count(); c++)
     {
       QString pkg = m_outdatedStringList->at(c);
+      pkgByName = m_packageRepo.getFirstPackageByName(pkg);
+
       html += "<tr><td><a href=\"goto:" + pkg + "\">" + pkg +
           "</td><td align=\"right\"><b><font color=\"#E55451\">" +
-          getOutdatedPkgOldVersion(pkg) +
+          pkgByName->version +
           "</b></font></td><td align=\"right\">" +
           getOutdatedPkgNewVersion(pkg) + "</td></tr>";
     }
