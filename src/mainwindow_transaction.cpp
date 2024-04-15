@@ -843,7 +843,7 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
     m_commandExecuting = ectn_SYSTEM_UPGRADE;
 
     QString command;
-    command = ctn_PKG_BIN + QLatin1String(" upgrade -y");
+    command = ctn_PKG_BIN + QLatin1String(" -y upgrade ");
 
     m_unixCommand->executeCommand(command);
     m_commandQueued = ectn_NONE;
@@ -880,19 +880,9 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
         m_commandExecuting = ectn_SYSTEM_UPGRADE;
         QStringList params;
 
-        if (question.isBootEnvChecked())
-        {
-          QString beName = QDateTime::currentDateTime().toString(QLatin1String("yyMMdd-hhmmss"));
-          params << UnixCommand::getShell();
-          params << "-c";
-          params << "bectl create " + beName + "; " + ctn_PKG_BIN + " upgrade -y";
-        }
-        else
-        {
-          params << ctn_PKG_BIN;
-          params << "upgrade";
-          params << "-y";
-        }
+        params << ctn_PKG_BIN;
+        params << "-y";
+        params << "upgrade";
 
         m_unixCommand->executeCommand(params);
         m_commandQueued = ectn_NONE;
@@ -1705,6 +1695,12 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
   progressRun = "%";
   progressEnd = "100%";
 
+  /* upgrade
+  [1/319] CUnit-2.1.3.tgz                                  100%   80KB  80.1KB/s   00:00
+  [2/319] GConf-3.2.3nb18.tgz                              100%  959KB 959.4KB/s   00:01
+  [3/319] MesaLib-21.3.9nb4.tgz                              0%    0     0.0KB/s   --:--
+  */
+
   //If it is a percentage, we are talking about curl output...
   if(msg.indexOf(progressEnd) != -1)
   {
@@ -1734,14 +1730,18 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
     QRegularExpression regex;
     QRegularExpressionMatch match;
 
-    if (msg.contains("Fetching") && !msg.contains(QRegularExpression("B/s")))
+    if (/*msg.contains("Fetching") &&*/ !msg.contains(QRegularExpression("B/s")))
     {
-      int p = msg.indexOf(":");
-      if (p == -1) return; //Guard!
+      //int p = msg.indexOf(":");
+      //if (p == -1) return; //Guard!
 
-      target = msg.left(p).remove("Fetching").trimmed();
+      p = msg.indexOf(".tgz");
+      if (p == -1) return;
+
+      //target = msg.left(p).remove("Fetching").trimmed();
+      target = msg.left(p+4);
       pName = target;
-      regex.setPattern("\\[\\d+/\\d+\\]\\s\\s(.*)");
+      regex.setPattern("\\[\\d+/\\d+\\]\\s(.+\\.tgz)");
       match = regex.match(target);
       if (match.hasMatch())
       {
@@ -1751,9 +1751,9 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
       if(!textInTabOutput(pName))
       {
         if (!msg.contains("["))
-          writeToTabOutputExt("<b><font color=\"#FF8040\">Fetching " + target + "</font></b>");
+          writeToTabOutputExt("<b><font color=\"#FF8040\">" + target + "</font></b>");
         else
-          writeToTabOutputExt("<b><font color=\"#B4AB58\">Fetching " + target + "</font></b>");
+          writeToTabOutputExt("<b><font color=\"#B4AB58\">" + target + "</font></b>");
       }
     }
     else if (msg.contains("Processing"))
@@ -1852,14 +1852,13 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
         }
         else
         {
-          //"calculating dependencies...-"
-          //"calculating dependencies...\\"
-          //"calculating dependencies...done.\r"
-
           QString altMsg = msg;
 
           if (altMsg.contains("calculating dependencies..."))
           {
+            altMsg.remove("\\r");
+            altMsg.remove("/");
+            altMsg.remove("|");
             altMsg.remove("-");
             altMsg.remove("\\\\");
             altMsg.remove("\\");
@@ -1869,7 +1868,7 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
             //qDebug() << "buggy: " << altMsg;
           }
 
-          if (altMsg.contains("calculating dependencies...") && textInTabOutput(altMsg))
+          if (altMsg.contains("calculating dependencies...") && (textInTabOutput(altMsg)||(altMsg.size() > 27)))
             return;
 
           writeToTabOutputExt(altMsg); //BLACK
@@ -2087,7 +2086,7 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
                (!newMsg.contains(QRegularExpression("\\):"))) &&
                (!newMsg.contains(QRegularExpression(":$"))))
       {
-        newMsg = "<b><font color=\"#B4AB58\">" + newMsg + "</font></b>"; //IT'S A PKGNAME!
+        newMsg = "<font color=\"#B4AB58\">" + newMsg + "</font>"; //IT'S A PKGNAME!
       }
     }
 
