@@ -1119,7 +1119,7 @@ void MainWindow::doInstall()
 {
   QString listOfTargets = getTobeInstalledPackages();
 
-  TransactionInfo ti = g_fwTargetUpgradeList.result(); //Package::getTargetUpgradeList(listOfTargets);
+  TransactionInfo ti = g_fwTargetUpgradeList.result();
   QStringList *targets = ti.packages;
 
   if (targets->count() == 0)
