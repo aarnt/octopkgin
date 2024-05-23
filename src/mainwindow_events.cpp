@@ -281,10 +281,35 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
       }
     }
   }
+  //TESTING CODE - COMMENT!!!
   /*else if(ke->key() == Qt::Key_D && ke->modifiers() == (Qt::ShiftModifier|Qt::ControlModifier))
   {
+    m_leFilterPackage->setText("free");
 
-  }*/
+    int c=1;
+    do{
+      if (c%3 == 0)
+      {
+        if (!m_actionSwitchToRemoteSearch->isChecked())
+        {
+          if (m_leFilterPackage->text() == "bat")
+            m_leFilterPackage->setText("free");
+          else
+            m_leFilterPackage->setText("bat");
+        }
+      }
+
+      qApp->processEvents();
+      sleep(1);
+      qApp->processEvents();
+      m_actionSwitchToRemoteSearch->trigger();
+      sleep(1);
+      qApp->processEvents();
+
+      c++;
+    } while (c <= 50);
+  }
+  //TESTING CODE - COMMENT!!! */
   else if (ke->key() == Qt::Key_U && ke->modifiers() == Qt::ControlModifier)
   {
     if (m_commandExecuting != ectn_NONE) return;

@@ -600,6 +600,7 @@ void MainWindow::buildRemotePackageList()
 
   //Refresh counters
   m_numberOfInstalledPackages = installedCount;
+  m_progressWidget->close();
 
   if (isRemoteSearchSelected())
   {
@@ -628,7 +629,6 @@ void MainWindow::buildRemotePackageList()
 
   counter = list->count();
   m_progressWidget->setValue(counter);
-  m_progressWidget->close();
 
   //ui->tvPackages->setColumnHidden(PackageModel::ctn_PACKAGE_REPOSITORY_COLUMN, true);
 
@@ -1292,7 +1292,6 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
 
       counter++;
       m_progressWidget->setValue(counter);
-      //qApp->processEvents();
     }
 
     m_progressWidget->close();
@@ -1302,6 +1301,7 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
     tvPkgFileList->setModel(modelPkgFileList);
     tvPkgFileList->header()->setDefaultAlignment( Qt::AlignCenter );
     modelPkgFileList->setHorizontalHeaderLabels( QStringList() << StrConstants::getContentsOf().arg(pkgName));
+    if (counter > 0) tvPkgFileList->expandAll();
   }
 
   m_cachedPackageInFiles = package->repository+"#"+package->name+"#"+package->version;
