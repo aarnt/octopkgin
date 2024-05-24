@@ -173,10 +173,16 @@ QString utils::retrieveDistroNews(bool searchForLatestNews)
         contentsTmpRss = in.readAll();
         fileTmpRss.close();
 
+        QFileInfo fiTmpRss(tmpRssPath);
+        QFileInfo fiRss(rssPath);
+
+        qint64 tmpRssSize = fiTmpRss.size();
+        qint64 rssSize = fiRss.size();
+
         tmpRssSHA1 = QCryptographicHash::hash(contentsTmpRss.toLatin1(), QCryptographicHash::Sha1);
         rssSHA1 = QCryptographicHash::hash(contentsRss.toLatin1(), QCryptographicHash::Sha1);
 
-        if (tmpRssSHA1 != rssSHA1){
+        if (tmpRssSize != rssSize && tmpRssSHA1 != rssSHA1){
           fileRss.remove();
           fileTmpRss.rename(tmpRssPath, rssPath);
 
