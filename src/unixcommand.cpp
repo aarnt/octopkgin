@@ -304,7 +304,7 @@ QByteArray UnixCommand::getPackageInformation(const QString &pkgName, bool forei
   }
   else
   {
-    args = "info " + pkgName;
+    args = "pkg-descr " + pkgName;
   }
 
   QByteArray result = performQuery(args);
@@ -318,12 +318,12 @@ QByteArray UnixCommand::getPackageContentsUsingPkg(const QString& pkgName)
 {
   QStringList params;
   params << QStringLiteral("pkg-content");
-  //params << QStringLiteral("%Fp");
   params << pkgName;
   QByteArray res = performQuery(params);
 
   //if the pkg is more than a MEGABYTE big, let's abort it!
-  if (res.size() > 1048576) return "";
+  //if (res.size() > 1048576) return "";
+  if (res.size() > 2097152) return "";
   else return res;
 }
 

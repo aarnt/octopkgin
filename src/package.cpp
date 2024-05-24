@@ -909,6 +909,22 @@ QString Package::extractFieldFromInfo(const QString &field, const QString &pkgIn
       aux = aux.left(fieldEnd).trimmed();
       aux = aux.replace("\n", "<br>");
     }
+    else if(field == "Description")
+    {
+      fieldPos = pkgInfo.indexOf(":", fieldPos+1);
+      fieldPos+=2;
+      aux = pkgInfo.mid(fieldPos);
+      int indHomePage = aux.indexOf("Homepage:");
+
+      if (indHomePage != -1)
+      {
+        fieldEnd = indHomePage;
+      }
+      else
+        fieldEnd = aux.indexOf('\n');
+
+      aux = aux.left(fieldEnd).trimmed();
+    }
     else
     {
       fieldPos = pkgInfo.indexOf(":", fieldPos+1);
@@ -951,7 +967,7 @@ QString Package::getRepository(const QString &pkgInfo)
  */
 QString Package::getURL(const QString &pkgInfo)
 {
-  QString URL = extractFieldFromInfo("WWW", pkgInfo);
+  QString URL = extractFieldFromInfo("Homepage", pkgInfo);
   if (!URL.isEmpty())
     return makeURLClickable(URL);
   else
@@ -1354,6 +1370,11 @@ QStringList Package::getContents(const QString& pkgName, bool isInstalled)
   if (isInstalled)
   {
     result = UnixCommand::getPackageContentsUsingPkg(pkgName);
+  }
+
+  if (result.isEmpty())
+  {
+    return QStringList();
   }
 
   QString aux(result);
