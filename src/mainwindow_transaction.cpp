@@ -1667,7 +1667,7 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
   QString progressRun;
   QString progressEnd;
 
-  if (msg.contains("stalled")) return;
+  if (msg.contains("- stalled -")) return;
 
   msg.remove(QRegularExpression(".+\\[Y/n\\].+"));
 
