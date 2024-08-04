@@ -1270,10 +1270,10 @@ void MainWindow::doInstallLocalPackages()
   if(result == QDialogButtonBox::Yes || result == QDialogButtonBox::AcceptRole)
   {
     QString command;
-    command = "pacman -U --force --noconfirm " + listOfTargets;
+    command = "pkg_add -U " + listOfTargets;
 
     m_lastCommandList.clear();
-    m_lastCommandList.append("pacman -U --force " + listOfTargets + ";");
+    m_lastCommandList.append("pkg_add -U " + listOfTargets + ";");
     m_lastCommandList.append("echo -e;");
     m_lastCommandList.append("read -n1 -p \"" + StrConstants::getPressAnyKey() + "\"");
 

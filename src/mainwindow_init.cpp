@@ -673,13 +673,13 @@ void MainWindow::initActions()
   actionGroup->setExclusive(true);
   connect(actionGroup, &QActionGroup::triggered, this, &MainWindow::tvPackagesSearchColumnChanged);
 
-  //ui->actionInstallLocalPackage->setIcon(IconHelper::getIconFolder());
+  ui->actionInstallLocalPackage->setIcon(IconHelper::getIconFolder());
   ui->actionOpenDirectory->setIcon(IconHelper::getIconFolder());
 
   connect(ui->actionCleanLocalCache, &QAction::triggered, this, &MainWindow::doCleanCache);
   //connect(ui->tvPackages->selectionModel(), SIGNAL(&QItemSelectionModel::selectionChanged,
   //        this, &MainWindow::invalidateTabs);
-  //connect(ui->actionInstallLocalPackage, SIGNAL(triggered()), this, SLOT(installLocalPackage()));
+  connect(ui->actionInstallLocalPackage, SIGNAL(triggered()), this, SLOT(installLocalPackage()));
   connect(ui->actionRemoveTransactionItem, &QAction::triggered, this, &MainWindow::onPressDelete);
   connect(ui->actionRemoveTransactionItems, &QAction::triggered, this, &MainWindow::onPressDelete);
   connect(ui->actionExit, &QAction::triggered, this, &MainWindow::close);
@@ -740,7 +740,7 @@ void MainWindow::initActions()
   {
     ui->actionHelpAbout->setIcon(IconHelper::getIconHelpAbout());
     ui->actionHelpUsage->setIcon(IconHelper::getIconHelpUsage());
-    //ui->actionInstallLocalPackage->setIcon(IconHelper::getIconInstallLocalPackage());
+    ui->actionInstallLocalPackage->setIcon(IconHelper::getIconInstallLocalPackage());
   }
 
   // Populate Tools menu
@@ -768,7 +768,7 @@ void MainWindow::initActions()
     }
   }
 
-  ui->actionInstallLocalPackage->setVisible(false);
+  ui->actionInstallLocalPackage->setVisible(true);
   ui->actionOpenRootTerminal->setVisible(false);
   toggleTransactionActions(true);
 }
