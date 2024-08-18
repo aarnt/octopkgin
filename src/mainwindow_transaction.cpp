@@ -1559,10 +1559,8 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
 
   if (m_commandExecuting == ectn_CLEAN_CACHE)
   {
-    enableTransactionActions();
     m_unixCommand->removeTemporaryFile();
-    delete m_unixCommand;
-    m_commandExecuting = ectn_NONE;
+    resetTransaction();
     return;
   }
 
@@ -1578,10 +1576,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
         //Retrieves the RSS News from respective Distro site...
         if (isRemoteSearchSelected())
         {
-          //bRefreshGroups = false;
           m_leFilterPackage->clear();
-          //m_actionSwitchToRemoteSearch->setChecked(false);
-          //m_actionSwitchToLocalSearch->setChecked(true);
           refreshDistroNews(true, false);
           m_commandExecuting = ectn_LOCAL_PKG_REFRESH;
           remoteSearchClicked();
@@ -1599,10 +1594,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
       {
         if (isRemoteSearchSelected())
         {
-          //bRefreshGroups = false;
           m_leFilterPackage->clear();
-          //m_actionSwitchToRemoteSearch->setChecked(false);
-          //m_actionSwitchToLocalSearch->setChecked(true);
           m_commandExecuting = ectn_LOCAL_PKG_REFRESH;
           remoteSearchClicked();
         }
@@ -1617,10 +1609,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
       {
         if (isRemoteSearchSelected())
         {
-          //bRefreshGroups = false;
           m_leFilterPackage->clear();
-          //m_actionSwitchToRemoteSearch->setChecked(false);
-          //m_actionSwitchToLocalSearch->setChecked(true);
           m_commandExecuting = ectn_LOCAL_PKG_REFRESH;
           remoteSearchClicked();
         }
@@ -1646,8 +1635,6 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
 void MainWindow::resetTransaction()
 {
   enableTransactionActions();
-  //if (m_commandExecuting != ectn_MIRROR_CHECK && bRefreshGroups)
-  //  refreshGroupsWidget();
 
   if (m_unixCommand != nullptr)
   {
@@ -2147,7 +2134,6 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
     else
       text->insertHtml(newMsg);
 
-    //std::cout << "Printed: " << msg.toLatin1().data() << std::endl;
     text->ensureCursorVisible();
   }
 }
