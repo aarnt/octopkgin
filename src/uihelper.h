@@ -174,16 +174,7 @@ public:
     if (WMHelper::isKDERunning())
       return QIcon::fromTheme("document-open-folder", QIcon(QStringLiteral(":/resources/images/folder.png")));
     else
-    {
-      if (WMHelper::isKDERunning() || WMHelper::isLXQTRunning() || WMHelper::isLuminaRunning())
-      {
-        return QIcon(QStringLiteral(":/resources/images/folder.png"));
-      }
-      else
-      {
-        return QIcon(QStringLiteral(":/resources/images/folder_gnome.png"));
-      }
-    }
+      return QIcon::fromTheme(QStringLiteral("folder"), QIcon(QStringLiteral(":/resources/images/folder.png")));
   }
 
   static QIcon getIconFindFileInPackage(){

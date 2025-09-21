@@ -1831,6 +1831,9 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
     msg.remove(QRegularExpression("QXcbConnection: XCB error.+"));
     msg.remove(QRegularExpression("qt.qpa.xcb:.+"));
     msg.remove(QRegularExpression("qt5ct: using qt5ct plugin"));
+    msg.remove(QRegularExpression("Detected locale.+"));
+    msg.remove(QRegularExpression("Qt depends on a UTF-8 locale.+"));
+    msg.remove(QRegularExpression("^for more information\\.+"));
 
     msg = msg.trimmed();
 
